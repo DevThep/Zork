@@ -1,0 +1,1 @@
+Explain the files/folders in .gitignore
