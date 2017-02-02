@@ -1,48 +1,122 @@
 package io.muic.ooc.zork;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import io.muic.ooc.zork.item.ContainerItem;
+import io.muic.ooc.zork.item.Item;
+
+import java.util.*;
 
 public class Room {
-    private final static int MAX_ITEMS = 3;
-    private List<Item> items = new ArrayList<>();
-    private Monster monster = null;
-    private Map<String,Room> exitMap = new HashMap<String, Room>();
+    private String name = "";
+    private String description = "";
+    private Set<Item> items = new HashSet<>();
+    public int north;
+    public int south;
+    public int east;
+    public int west;
+    public boolean locked = false;
+    public int toUnlock;
+    private boolean exitLevel = false;
+    private ArrayList<String> dir_avail = new ArrayList<>();
+    public Room(String name, String description,int north,int south,int east, int west){
+        this.name = name;
+        this.description= description;
+        this.north = north;
+        this.south = south;
+        this.east = east;
+        this.west = west;
+        if (this.north != -1) dir_avail.add("NORTH");
+        if (this.south != -1) dir_avail.add("SOUTH");
+        if (this.east != -1) dir_avail.add("EAST");
+        if (this.west != -1) dir_avail.add("WEST");
+    }
+
+    public boolean isExitLevel() {
+        return exitLevel;
+    }
+
+    public void setExitLevel(boolean exitLevel) {
+        this.exitLevel = exitLevel;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public void setToUnlock(int toUnlock) {
+        this.toUnlock = toUnlock;
+    }
+
+    public boolean isLocked(){
+        return locked;
+    }
+
+    public int getToUnlock() {
+        return toUnlock;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Item getItem(String itemName){
+        for (Item i : items){
+            if (i.getName().equals(itemName)){
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public ContainerItem getContainerItem(String itemName){
+        for (Item i : items){
+            if (i.getName().equals(itemName) && (i instanceof ContainerItem)){
+                return (ContainerItem) i;
+            }
+        }
+        System.out.println(itemName + " does not exist");
+        return null;
+    }
 
     public boolean addItem(Item item) {
-        if (this.items.size() < MAX_ITEMS){
-            this.items.add(item);
-            return true;
-        }else {
-            return false;
+        this.items.add(item);
+        return true;
+    }
+
+    public void addItems(List<Item> item) {
+        for (Item i : item){
+            this.items.add(i);
         }
     }
 
-    public String getInfo() {
-        // print items
-        // print monster
-        // print exit
-        // print
-        return "TODO";
-    }
-
-    public void setMonster(Monster monster){
-        if (this.monster != null){
-            this.monster = monster;
+    public void removeItems(String name){
+        for(Item i : items){
+            if (i.getName().equals(name)) {
+                items.remove(i);
+                break;
+            }
         }
     }
 
-    public void setExit(String direction, Room exitingRoom){
-        switch (direction){
-            case "north" :
-            case "east" :
-            case "west" :
-            case "south" :
-                exitMap.put(direction,exitingRoom);
-            default: ;
-        }
+    public void getInfo() {
+        System.out.println(this.description);
+        System.out.println("Room items : " + getItemNames(items));
+        getDirections();
+    }
 
+    private String getItemNames(Set<? extends Item> set){
+        ArrayList<String> temp = new ArrayList<>();
+        for(Item i: set){
+            temp.add(i.getName());
+        }
+        return temp.toString();
+    }
+
+    public void getDirections(){
+        System.out.println("Available directions : " + dir_avail.toString());
+    }
+
+    public void itemInfo(String item){
+        Item it = getItem(item);
+        it.getInfo();
     }
 }
