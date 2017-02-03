@@ -28,9 +28,9 @@ MANUAL
 10. info
 	- reveals player stats and room info.
 11. info player
-	- reveals room info
-12. info room
 	- reveals player info
+12. info room
+	- reveals room info
 
 INFO
 Player starts with 70 HP.
