@@ -7,5 +7,4 @@ Level 2:
 Down in the dimly lit basement, you hear loud sadistic grunting and as a defense mechanism you go around looking for items that gives you hope for survival as there is no way out but through the monsters lair.
 
 Level 3:
-Insanity: Same thing over and over again.
-Insanity ensues as what you thought was the end only threw you into a larger pit of problems. You have ventured into hell and must confront Mors, the ruler of underworld and the personification of death itself.
+Insanity: How do you escape the insanity?

@@ -31,3 +31,9 @@ MANUAL
 	- reveals room info
 12. info room
 	- reveals player info
+
+INFO
+Player starts with 70 HP.
+He can carry at most 3 weapons and 2 potion items.
+Each round he stays in the room with monster, the monster
+attacks each round.
