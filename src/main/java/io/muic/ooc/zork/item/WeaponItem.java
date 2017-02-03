@@ -8,4 +8,10 @@ public class WeaponItem extends Item{
         super(name,description);
         this.power = power;
     }
+
+    public int getPower() {
+        return power;
+    }
+
+
 }

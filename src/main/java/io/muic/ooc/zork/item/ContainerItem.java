@@ -15,9 +15,11 @@ public class ContainerItem extends Item {
     public void open(){
         if (this.isOpen){
             System.out.println("Already opened");
+            getInfo();
         }else{
             System.out.println("Opened " +this.getName());
             this.isOpen = true;
+            getInfo();
         }
     }
 
@@ -33,12 +35,6 @@ public class ContainerItem extends Item {
     public boolean addItem(Item item) {
         this.items.add(item);
         return true;
-    }
-
-    public void addItems(List<Item> item) {
-        for (Item i : item){
-            this.items.add(i);
-        }
     }
 
     public void removeItems(String name){

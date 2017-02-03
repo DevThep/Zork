@@ -13,6 +13,10 @@ public class OpenCommand extends Command{
     @Override
     public void apply(Scanner args){
         args.next();
+        if(!args.hasNext()){
+            System.out.println("To open container use `open {container}`");
+            return;
+        }
         ContainerItem container =  player.getCurrentRoom().getContainerItem(args.next().toLowerCase());
         if (container != null){
             container.open();

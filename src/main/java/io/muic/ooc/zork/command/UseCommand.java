@@ -11,6 +11,12 @@ public class UseCommand extends Command{
     }
     @Override
     public void apply(Scanner args){
-
+        args.next();
+        if (!args.hasNext()){
+            System.out.println("To use item `use {potion}`");
+        }else{
+            String item = args.next();
+            player.use(item);
+        }
     }
 }

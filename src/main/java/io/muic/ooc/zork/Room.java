@@ -9,6 +9,8 @@ public class Room {
     private String name = "";
     private String description = "";
     private Set<Item> items = new HashSet<>();
+    private String note = "";
+    private Monster monster = null;
     public int north;
     public int south;
     public int east;
@@ -17,7 +19,7 @@ public class Room {
     public int toUnlock;
     private boolean exitLevel = false;
     private ArrayList<String> dir_avail = new ArrayList<>();
-    public Room(String name, String description,int north,int south,int east, int west){
+    public Room(String name, String description, int north, int south, int east, int west){
         this.name = name;
         this.description= description;
         this.north = north;
@@ -28,6 +30,30 @@ public class Room {
         if (this.south != -1) dir_avail.add("SOUTH");
         if (this.east != -1) dir_avail.add("EAST");
         if (this.west != -1) dir_avail.add("WEST");
+    }
+
+    public void setMonster(Monster monster) {
+        this.monster = monster;
+    }
+
+    public Monster getMonster() {
+        return monster;
+    }
+
+    public boolean containMonster() {
+        if (this.monster != null){ return true; }
+        return false;
+    }
+
+    public String getDescription() { return description; }
+
+    public void getNote() {
+        System.out.println("Reading Note....");
+        System.out.println(note);
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public boolean isExitLevel() {
@@ -113,10 +139,5 @@ public class Room {
 
     public void getDirections(){
         System.out.println("Available directions : " + dir_avail.toString());
-    }
-
-    public void itemInfo(String item){
-        Item it = getItem(item);
-        it.getInfo();
     }
 }

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Player {
-    private int hp = 100;
+    private int hp = 70;
     private String name = "";
     private Set<WeaponItem> weapons = new HashSet<>();
     private Set<UseableItem> potions = new HashSet<>();
@@ -23,8 +23,13 @@ public class Player {
         this.currentRoom = currentRoom;
     }
 
+    public void read(){
+        currentRoom.getNote();
+    }
+
     public void setMap(GameMap map) {
         this.map = map;
+        System.out.println(this.map.getDescription());
     }
 
     public int getHP() {
@@ -32,7 +37,7 @@ public class Player {
     }
 
     public void setHP(int HP) {
-        this.hp = hp;
+        this.hp = HP;
     }
 
     public Room getCurrentRoom() {
@@ -58,14 +63,17 @@ public class Player {
                 room.setLocked(false);
                 this.currentRoom = map.get(roomLoc);
                 System.out.println("Entered " + currentRoom.getName());
+                System.out.println(currentRoom.getDescription());
             }else if (room.isLocked()){
                 System.out.println("Room locked, get enough keys to open it.");
             }else{
                 this.currentRoom = room;
                 System.out.println("Entered " + currentRoom.getName());
+                System.out.println(currentRoom.getDescription());
             }
             if (this.currentRoom.isExitLevel()){
-
+                this.setMap(map.getNextMap());
+                this.currentRoom = map.get(0);
             }
         }
     }
@@ -76,7 +84,7 @@ public class Player {
         System.out.println("Weapons " + getItemNames(weapons));
         System.out.println("Potions " + getItemNames(potions));
         System.out.println("Quest Items " + getItemNames(questItems));
-        System.out.println("Room " + currentRoom.getName());
+        System.out.println("Room : " + currentRoom.getName());
         System.out.println("------------");
     }
 
@@ -164,15 +172,63 @@ public class Player {
             System.out.println("Must open " + containerName + " first!");
         }else{
             Item it = temp.getItem(item);
-            System.out.println(it.getClass());
             if (it instanceof QuestItem){
                 questItems.add((QuestItem) it);
+                System.out.println("Quest item picked : " + item);
                 temp.removeItems(item);
             }else {
-                System.out.println("HERE");
-                takeItem(item);
+                if (it instanceof WeaponItem){
+                    if (weapons.size() == 3) {
+                        System.out.println("Weapons bag full, drop some items to make some space");
+                    }else{
+                        weapons.add((WeaponItem) it);
+                        temp.items.remove(it);
+                    }
+                }else if (it instanceof UseableItem){
+                    if (potions.size() == 2) {
+                        System.out.println("Potion bag full, drop some items to make some space");
+                    }else{
+                        potions.add((UseableItem) it);
+                        temp.items.remove(it);
+                    }
+                }
             }
         }
     }
+
+    public void use(String item){
+        for(UseableItem i: potions){
+            if (i.getName().equals(item)){
+                boolean toUse = i.heal(this);
+                if (toUse) potions.remove(i);
+                return;
+            }
+        }System.out.println("The item specified does not exist in inventory!");
+    }
+
+    public void attack(String weapon){
+        WeaponItem w = null;
+        for (WeaponItem i: weapons){
+            if (i.getName().equals(weapon)){
+                w = i;
+                break;
+            }
+        }
+        if (weapon == null){
+            System.out.println("You don't have this weapon.");
+        }
+        else if (!currentRoom.containMonster()){
+            System.out.println("There is no monster in this room!");
+        }else{
+            if (currentRoom.getMonster().isAlive()){
+                int curHP = currentRoom.getMonster().getHP();
+                currentRoom.getMonster().setHP(curHP - w.getPower());
+            }else{
+                System.out.println("Monster is DEAD!");
+            }
+
+        }
+    }
+
 
 }

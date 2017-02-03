@@ -14,9 +14,12 @@ import java.util.Scanner;
  */
 public class ZorkRunner {
     public static void main(String[] args) {
-        GameMap map = new GameMapGenerator().createLvl1();
-        Player p1 = new Player("Dev",map.get(0));
+        GameMapGenerator generator = new GameMapGenerator();
+        GameMap map = generator.createLvl1();
+        GameMap map2 = generator.createLvl2();
+        Player p1 = new Player("Dev",map.get(1));
         p1.setMap(map);
+        map.setNextMap(map2);
         HashMap<String, Command> commands = new HashMap<String, Command>() {
             {
                 // commands are added here using lambdas. It is also possible to dynamically add commands without editing the code.
@@ -24,8 +27,12 @@ public class ZorkRunner {
                 put("take", new TakeCommand(p1));
                 put("open", new OpenCommand(p1));
                 put("info", new InfoCommand(p1));
+                put("attack", new AttackCommand(p1));
                 put("drop", new DropCommand(p1));
+                put("use", new UseCommand(p1));
+                put("read", new ReadCommand(p1));
                 put("quit", new QuitCommand(p1));
+
             }
         };
         boolean quit = false;
@@ -39,8 +46,24 @@ public class ZorkRunner {
             }catch (NullPointerException e){
                 System.out.println("Invalid input");
             }
+            if (p1.getCurrentRoom().containMonster()){
+                Monster m = p1.getCurrentRoom().getMonster();
+                if (m.isAlive()){
+                    m.attack(p1);
+                    System.out.println(m.getName() + " attacked you. HP remaining : " + p1.getHP());
+                }else{
+                    System.out.println("Mors is DEAD");
+                    break;
+                }
+            }if (p1.getHP() < 0){
+                System.out.println("YOU LOST -> GAME OVER!!!");
+                break;
+            }
             System.out.print("> ");
             line = in.nextLine();
+        }
+        if (p1.getHP()>= 0){
+            generator.createLvl3();
         }
     }
 }
