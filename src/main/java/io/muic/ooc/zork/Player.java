@@ -23,6 +23,14 @@ public class Player {
         this.currentRoom = currentRoom;
     }
 
+    public Set<UseableItem> getPotions() {
+        return potions;
+    }
+
+    public Set<WeaponItem> getWeapons() {
+        return weapons;
+    }
+
     public void read(){
         currentRoom.getNote();
     }
